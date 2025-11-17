@@ -40,10 +40,12 @@ public class Producto {
 
     //Metodos de disminuir y aumentar el stock
     public int vender(int cantidad){
-        return stock - cantidad;
+        this.stock = stock - cantidad;
+        return stock;
     }
 
     public int reponer(int cantidad){
+        this.stock = stock + cantidad;
         return stock + cantidad;
     }
 

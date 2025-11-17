@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import Venta.Venta;
 
 public class Cliente {
-
     //Atributos
     private int idCliente;
     private String nombre;
@@ -39,6 +38,9 @@ public class Cliente {
         return historialCompras;
     }
 
+    public String toString(){
+        return getId() + "," + getNombre() + "," + getEmail() + "," + getHistorialCompras();
+    }
 
     //Mostrar toda la info del cliente
     public void mostrarInfo(){
