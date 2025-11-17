@@ -3,13 +3,13 @@ package itemsVenta;
 
 import Producto.Producto;
 
-public class items {
+public class Items {
     //Atributos
     private Producto producto;
     private int cantidad;
 
     //Constructor
-    public items(Producto producto, int cantidad){
+    public Items(Producto producto, int cantidad){
         this.producto = producto;
         this.cantidad = cantidad;
     }
@@ -19,7 +19,7 @@ public class items {
         return producto;
     }
 
-    public int cantidad(){
+    public int getCantidad(){
         return cantidad;
     }
 

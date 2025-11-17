@@ -4,18 +4,18 @@ package Venta;
 import java.util.ArrayList;
 
 import Cliente.Cliente;
-import itemsVenta.items;
+import itemsVenta.Items;
 
 public class Venta {
     //Atributos
-    int idVenta;
-    Cliente cliente;
-    ArrayList<items> itemsVenta = new ArrayList<>();
-    double totalCompra;
-    String fecha;
+    private int idVenta;
+    private Cliente cliente;
+    private ArrayList<Items> itemsVenta = new ArrayList<>();
+    private double totalCompra;
+    private String fecha;
 
     //Contructor
-    public Venta(int idVenta, Cliente cliente, ArrayList<items> itemsVenta,double totalCompra, String fecha){
+    public Venta(int idVenta, Cliente cliente, ArrayList<Items> itemsVenta,double totalCompra, String fecha){
         this.idVenta = idVenta;
         this.cliente = cliente;
         this.itemsVenta = itemsVenta;
@@ -23,6 +23,7 @@ public class Venta {
         this.fecha = fecha;
     }
 
+    /*Metodos getter y setter*/
     public int getIdVenta() {
         return idVenta;
     }
@@ -31,7 +32,7 @@ public class Venta {
         return cliente;
     }
 
-    public ArrayList<items> getItemsVenta() {
+    public ArrayList<Items> getItemsVenta() {
         return itemsVenta;
     }
 
@@ -45,7 +46,7 @@ public class Venta {
 
 
     //Agregar Productos comprados a la venta
-    public void agregarItems(items itm){
+    public void agregarItems(Items itm){
         itemsVenta.add(itm);
     }
 
@@ -57,11 +58,11 @@ public class Venta {
     sb.append(cliente.getId()).append(",");
 
     for (int i = 0; i < itemsVenta.size(); i++) {
-        items it = itemsVenta.get(i);
+        Items it = itemsVenta.get(i);
 
         sb.append(it.getProducto().getId())
         .append("-")
-        .append(it.cantidad());  // formato: id-cantidad
+        .append(it.getCantidad());  // formato: id-cantidad
 
         if (i < itemsVenta.size() - 1) {
             sb.append(",");  // separar con comas
@@ -73,18 +74,4 @@ public class Venta {
 
     return sb.toString();
     }
-
-    //Calcular el total de la venta
-    public double calcularTotal(ArrayList<items> itemsVenta){
-        double total = 0;
-
-        for(items i: itemsVenta){
-            total += i.getSubTotal();
-        }
-
-        this.totalCompra = total;
-        return total;
-    }
-
-    
 }

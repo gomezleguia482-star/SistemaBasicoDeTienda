@@ -63,4 +63,5 @@ public class Producto {
         System.out.println("Stock: " + getStock());
         System.out.println("Disponible: " + getDisponible());
     }
+
 }

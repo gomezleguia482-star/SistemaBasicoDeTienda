@@ -39,7 +39,7 @@ public class Cliente {
     }
 
     public String toString(){
-        return getId() + "," + getNombre() + "," + getEmail() + "," + getHistorialCompras();
+        return getId() + "," + getNombre() + "," + getEmail();
     }
 
     //Mostrar toda la info del cliente

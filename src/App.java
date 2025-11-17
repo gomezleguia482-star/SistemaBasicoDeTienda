@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import Cliente.Cliente;
 import Venta.Venta;
-import itemsVenta.items;
+import itemsVenta.Items;
 import Producto.*;
 
 public class App {
@@ -15,8 +15,8 @@ public class App {
     ArrayList<Venta> ventas = new ArrayList<>();
     Scanner sc = new Scanner(System.in);
 
-    //Metodo para cargar de la base de datos a el arrayList de productos
-    public void llenarProductos() {
+    /*Metodo que Guarda termporalmente durante la ejecucion los producto en en Array de productos*/ 
+    public void cargarProductos() {
         try {
             File archivo = new File("BaseDatos/Producto.txt");
             BufferedReader br = new BufferedReader(new FileReader(archivo));
@@ -28,23 +28,23 @@ public class App {
                 String[] partes = linea.split(",");
                 String tipo = partes[0];
 
-                Producto p = null;
+                Producto produc = null;
 
                 switch (tipo) {
 
                     case "PA":    // Producto Alimenticio
-                        p = new ProductoAlimento(
+                        produc = new ProductoAlimento(
                                 Integer.parseInt(partes[1]),
                                 partes[2],
                                 Double.parseDouble(partes[3]),
                                 Integer.parseInt(partes[4]),
                                 Boolean.parseBoolean(partes[5]),
-                                partes[6]   // ejemplo: fecha vencimiento
+                                partes[6] // fecha de vencimiento
                         );
                         break;
 
                     case "PE":    // Producto Electrónico
-                        p = new ProductoElectrico(
+                        produc = new ProductoElectrico(
                                 Integer.parseInt(partes[1]),
                                 partes[2],
                                 Double.parseDouble(partes[3]),
@@ -55,14 +55,14 @@ public class App {
                         break;
 
                     case "PR":    // Producto Ropa
-                        p = new ProductoRopa(
+                        produc = new ProductoRopa(
                                 Integer.parseInt(partes[1]),
                                 partes[2],
                                 Double.parseDouble(partes[3]),
                                 Integer.parseInt(partes[4]),
                                 Boolean.parseBoolean(partes[5]),
-                                Integer.parseInt(partes[6]),
-                                partes[7]
+                                Integer.parseInt(partes[6]), // talla
+                                partes[7] // color
                         );
                         break;
 
@@ -71,8 +71,8 @@ public class App {
                         break;
                 }
 
-                if (p != null) {
-                    producto.add(p);
+                if (produc != null) {
+                    producto.add(produc);
                 }
             }
 
@@ -84,8 +84,9 @@ public class App {
         }
     }
 
-    //Metodo para cargar de la base de datos al arrayList de Clientes
-    public void llenarClientes(){
+
+    /*Metodo que Guarda termporalmente durante la ejecucion los clientes en en Array de clientes*/
+    public void cargarClientes(){
         try {
             File archivo = new File("BaseDatos/Cliente.txt");
             FileReader fr = new FileReader(archivo);
@@ -95,14 +96,13 @@ public class App {
             while((linea = br.readLine()) != null){
                 String[] partes = linea.split(",");
 
-                Cliente C = new Cliente(
+                Cliente cliente = new Cliente(
                 Integer.parseInt(partes[0]),  // id
                 partes[1],                   // nombre
                 partes[2],                   // email
                 new ArrayList<>()            // historial vacío
             );
-
-                clientes.add(C);  // AGREGAR A LA LISTA GLOBAL (importantísimo)
+                clientes.add(cliente);  // AGREGAR A LA LISTA GLOBAL (importantísimo)
             }
             br.close();
         } catch (IOException e) {
@@ -110,8 +110,12 @@ public class App {
         }
     }
 
-    public void llenarVentas(){ File archivo = new File("BaseDatos/Venta.txt");
 
+    /*Metodo que Guarda termporalmente durante la ejecucion los ventas en en Array de ventas*/
+    public void cargarVentas(){ 
+    File archivo = new File("BaseDatos/Venta.txt");
+
+    // verificamos que exista el archivo, si no existe se crea nuevamente 
     if (!archivo.exists()) {
         System.out.println("Venta.txt no existe, se creará al guardar ventas.");
         return;
@@ -133,20 +137,20 @@ public class App {
             Cliente cliente = buscarClienteID(idCliente);
             if (cliente == null) continue;
 
-            ArrayList<items> listaItems = new ArrayList<>();
+            ArrayList<Items> listaItems = new ArrayList<>();
 
             // --- productos con cantidades ---
             String[] productosInfo = partes[2].split(",");
 
-            for (String info : productosInfo) {
-                String[] prodCant = info.split("-");
+            for (String informacion : productosInfo) {
+                String[] prodCant = informacion.split("-");
 
                 int idProducto = Integer.parseInt(prodCant[0]);
                 int cantidad = Integer.parseInt(prodCant[1]);
 
-                Producto p = buscarProductoID(idProducto);
-                if (p != null) {
-                    items nuevo = new items(p, cantidad);
+                Producto producto = buscarProductoID(idProducto);
+                if (producto != null) {
+                    Items nuevo = new Items(producto, cantidad);
                     listaItems.add(nuevo);
                 }
             }
@@ -157,6 +161,7 @@ public class App {
             Venta venta = new Venta(idVenta, cliente, listaItems, total, fecha);
 
             ventas.add(venta);
+            cliente.getHistorialCompras().add(venta);
         }
 
         } catch (Exception e) {
@@ -164,7 +169,62 @@ public class App {
         }
     }
 
-    // ----- AGREGAR PRODUCTOS -----
+
+    /*Metodo que guarda nuevamente los productos
+     * en el archivo producto.txt despues de cada
+     * venta, con su correspondiente nuevo Stock
+     */
+    public void guardarProducto(){
+        try {
+            File archivo = new File("BaseDatos/Producto.txt");
+            FileWriter fw = new FileWriter(archivo);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            for(Producto P: producto){
+                pw.println(P.toString());
+            }
+
+            pw.close();
+            bw.close();
+        } catch (IOException e) {
+            e.fillInStackTrace();
+        }
+    }
+
+
+        /*Metodo que busca los cliente por su id
+     * si lo encuentra devuelve el cliente
+     * si no devuelve null 
+     */
+    public Cliente buscarClienteID(int id){
+        for(Cliente C: clientes){
+            if(C.getId() == id){
+                return C;
+            }
+        }
+        return null;
+    }
+
+
+    /*Metodo que buscar los producto por su id
+     * si lo encuentra devuelve el producto 
+     * si no cevuelve null
+     */
+    public Producto buscarProductoID(int id){
+        for(Producto P: producto){
+            if(P.getId() == id){
+                return P;
+            }
+        }
+        return null;
+    }
+
+
+    /*Metodos basados solo en los PRODUCTOS
+     * agregarProducto, mostrarProductos, buscarProductosPorID
+     * AGREGAR PRODUCTO
+     */
     public void agregarProducto(){
         
         try {
@@ -172,6 +232,7 @@ public class App {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
+            // Se elige que clase se producto se va a agregar
             System.out.println("Elige el producto que desea ingresar");
             System.out.println("1: Producto de Alimento");
             System.out.println("2: Producto electronico");
@@ -200,6 +261,7 @@ public class App {
                 disponible = true;
             }
 
+            // De acuerdo a la opcion se crea el objeto de producto correspondiente
             Producto producto = null;
             switch (opcion) {
                 case 1:
@@ -229,7 +291,9 @@ public class App {
                     break;
             }
 
-            pw.println(producto);
+            // Ingresamos el producto al archivo Producto.txt
+
+            pw.println(producto.toString());
             pw.close();
             bw.close();
             fw.close();
@@ -240,18 +304,24 @@ public class App {
         }
     }
 
-    //Mostrar todo los producto existentes
+
+    //Mostrar los productos con su inforamcion correspondiente
     public void mostrarProductos() {
-        llenarProductos();
+        // Se cargan los productos al array global de productos
+        // y se muestra la informacion correspondiente a cada producto
+        cargarProductos();
 
         for(Producto P: producto){
             P.mostrarInfo();
         }
     }
 
-    //Buscar un producto por su ID
+
+    //Buscar producto por su ID
     public void buscarProducto() {
-        llenarProductos();
+        // Se cargan los productos al array global de productos  
+        // si es encontrado se muestra su informacion
+        cargarProductos();
 
         System.out.println("Ingresa el id del producto");
         int id = sc.nextInt();
@@ -270,9 +340,15 @@ public class App {
         }
     }
 
-    // ----- CLIENTES -----
+
+    /*Metodos basados solo en los CLIENTES
+     * agregarCliente, mostrarClientes
+     * AGREGAR CLIENTE
+     */
     public void agregarCliente() {
         try {
+            // Se agrega los clientes al archivo Clientes.txt
+
             FileWriter fw = new FileWriter("BaseDatos/Clientes.txt", true);
             BufferedWriter br = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(br);
@@ -298,8 +374,11 @@ public class App {
     }
 
 
+    //Mostrar los clientes con su informacion correspondiente
     public void mostrarClientes() {
-        llenarClientes();
+        // Se cargan los clientes al array Global de clientes
+        // y se muestran  con su informacion correspondiente
+        cargarClientes();
 
         for(Cliente C: clientes){
             C.mostrarInfo();
@@ -307,9 +386,15 @@ public class App {
     }
 
 
-    // ----- VENTAS -----
+    /*Metodos basados solo en las VENTAS
+     *realizarVenta, mostrarVentas
+     * REALIZAR VENTA
+     */
     public void realizarVenta() {
-        // seleccionar cliente
+
+        /* Se busca el cliente por el id si lo encuentra se devuelve el cliente
+         * si no se acaba el programa por que devuelve null
+         */
         System.out.print("ID del cliente: ");
         int idCliente = sc.nextInt();
 
@@ -320,11 +405,17 @@ public class App {
             return;
         }
 
-        ArrayList<items> listaItems = new ArrayList<>();
+
+        // Inicializamos un array donde se van a guardar todos lo items de la compra
+        // Temporalmente
+        ArrayList<Items> listaItems = new ArrayList<>();
         String opcion = "si";
 
         while (opcion.equalsIgnoreCase("si")) {
 
+            /* Se busca el producto por el id si lo encuentra se devuelve el producto
+             * si no se acaba el programa por que devuelve null
+             */
             System.out.print("Ingresa el ID del producto: ");
             int idProducto = sc.nextInt();
 
@@ -348,45 +439,48 @@ public class App {
                 return;
             }
 
-            // agregar item temporal
-            items item = new items(producto, cantidad);
+            // Se crea y de una vez se agrega temporalmente al arrayList
+            // De listaItems
+            Items item = new Items(producto, cantidad);
             listaItems.add(item);
 
-            // rebajar stock SOLO después de agregar el item
+            // Descontamos el STOCK del poroducto 
             producto.vender(cantidad);
 
             System.out.print("¿Desea comprar algo más? (si/no): ");
-            opcion = sc.next();  // <-- CORRECTO
+            opcion = sc.next();  // (si / no)
         }
 
-        // crear venta
+        // Creamos realmente la venta
         int idVenta = ventas.size() + 1;
         String fecha = java.time.LocalDate.now().toString();
 
-        double total = 0;
-        for (items it : listaItems) {
-            total += it.getSubTotal();
+        double total = 0.0;
+        for (Items items : listaItems) {
+            total += items.getSubTotal();
         }
 
         Venta nuevaVenta = new Venta(idVenta, cliente, listaItems, total, fecha);
 
         System.out.println("Total a pagar: $" + total);
 
-        // guardar en lista memoria
+        // Guardar temporalmente en el arrayList ventas global
         ventas.add(nuevaVenta);
 
-        // agregar historial al cliente
+        // Se agrega la venta al historial de compras al cliente correspondiente
         cliente.getHistorialCompras().add(nuevaVenta);
 
-        // guardar en archivo
+        // Guarda la venta en el archivo Ventas.txt
+        // Guarda nuevamente los productos depues de cada Venta con la nueva cantidad
         try {
             FileWriter fw = new FileWriter("BaseDatos/Venta.txt", true);
             PrintWriter pw = new PrintWriter(fw);
 
             pw.println(nuevaVenta.toString());
-            pw.close();
 
-            FileReader fr = new FileReader(new File("BaseDatos/Producto"));
+            // Guardar nuevamente los productos en el archivo con el metodo de guardar productos
+            guardarProducto();
+            pw.close();
             
         } catch (Exception e) {
             e.fillInStackTrace();
@@ -396,30 +490,16 @@ public class App {
     }
 
 
-    public Cliente buscarClienteID(int id){
-        for(Cliente C: clientes){
-            if(C.getId() == id){
-                return C;
-            }
-        }
-        return null;
-    }
-
-    public Producto buscarProductoID(int id){
-        for(Producto P: producto){
-            if(P.getId() == id){
-                return P;
-            }
-        }
-        return null;
-    }
-
+    //Muestra las ventas 
     public void mostrarVentas() {
+
+        // Verificamos qu el array no este vacio
         if (ventas.isEmpty()) {
         System.out.println("No hay ventas registradas.");
         return;
         }
 
+        //Recorremos las ventas y mostramos la informacion correspondiente
         for (Venta V : ventas) {
             System.out.println("=====================================");
             System.out.println("ID Venta: " + V.getIdVenta());
@@ -427,21 +507,24 @@ public class App {
             System.out.println("Fecha: " + V.getFecha());
             System.out.println("Productos comprados:");
 
-            double subtotalTotal = 0;
-            for (items it : V.getItemsVenta()) {
-                Producto p = it.getProducto();
-                int cant = it.cantidad();
-                double subtotal = it.getSubTotal();
-                subtotalTotal += subtotal;
+            // Recorremos el array de los items y toda la informacion del producto
+            // Y se mustra la informacion correspondiente a cada producto comprado
+            double totalVenta = 0;
+            for (Items items : V.getItemsVenta()) {
+                Producto producto = items.getProducto();
+                int cantidad = items.getCantidad();
+                double subtotal = items.getSubTotal();
+                totalVenta += subtotal;
 
-                System.out.println(" - " + p.getNombre() + " | Cantidad: " + cant + " | Precio unitario: $" + p.getPrecio() + " | Subtotal: $" + subtotal);
+                System.out.println(" - " + producto.getNombre() + 
+                " | Cantidad: " + cantidad + 
+                " | Precio unitario: $" + producto.getPrecio() + 
+                " | Subtotal: $" + subtotal);
             }
 
-            System.out.println("Total de la venta: $" + subtotalTotal);
+            System.out.println("Total de la venta: $" + totalVenta) ;
             System.out.println("=====================================\n");
         }
     }
 
-    public static void main(String[] args) {
-    }
 }
