@@ -75,10 +75,7 @@ public class App {
                     producto.add(produc);
                 }
             }
-
             br.close();
-            System.out.println("Productos cargados correctamente.");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,7 +85,7 @@ public class App {
     /*Metodo que Guarda termporalmente durante la ejecucion los clientes en en Array de clientes*/
     public void cargarClientes(){
         try {
-            File archivo = new File("BaseDatos/Cliente.txt");
+            File archivo = new File("BaseDatos/Clientes.txt");
             FileReader fr = new FileReader(archivo);
             BufferedReader br = new BufferedReader(fr);
             String linea;
@@ -99,8 +96,7 @@ public class App {
                 Cliente cliente = new Cliente(
                 Integer.parseInt(partes[0]),  // id
                 partes[1],                   // nombre
-                partes[2],                   // email
-                new ArrayList<>()            // historial vacío
+                partes[2]                   // historial vacío
             );
                 clientes.add(cliente);  // AGREGAR A LA LISTA GLOBAL (importantísimo)
             }
@@ -113,56 +109,49 @@ public class App {
 
     /*Metodo que Guarda termporalmente durante la ejecucion los ventas en en Array de ventas*/
     public void cargarVentas(){ 
-    File archivo = new File("BaseDatos/Venta.txt");
 
-    // verificamos que exista el archivo, si no existe se crea nuevamente 
-    if (!archivo.exists()) {
-        System.out.println("Venta.txt no existe, se creará al guardar ventas.");
-        return;
-    }
-
-    try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
-
+    try {
+        File archivo = new File("BaseDatos/Venta.txt");
+        BufferedReader br = new BufferedReader(new FileReader(archivo));
+        // verificamos que exista el archivo, si no existe se crea nuevamente 
+        if (!archivo.exists()) {
+            System.out.println("Venta.txt no existe, se creará al guardar ventas.");
+            return;
+        }
         String linea;
 
         while ((linea = br.readLine()) != null) {
-
-            if (linea.trim().isEmpty()) continue;
-
-            String[] partes = linea.split(";");
+            String[] partes = linea.split(",");
 
             int idVenta = Integer.parseInt(partes[0]);
             int idCliente = Integer.parseInt(partes[1]);
 
             Cliente cliente = buscarClienteID(idCliente);
-            if (cliente == null) continue;
+            if (cliente == null) continue; // saltar si no existe
 
             ArrayList<Items> listaItems = new ArrayList<>();
 
-            // --- productos con cantidades ---
-            String[] productosInfo = partes[2].split(",");
-
-            for (String informacion : productosInfo) {
-                String[] prodCant = informacion.split("-");
+            // todos los elementos entre partes[2] y antes del último son productos
+            for (int i = 2; i < partes.length - 1; i++) {
+                String[] prodCant = partes[i].split("-");
 
                 int idProducto = Integer.parseInt(prodCant[0]);
                 int cantidad = Integer.parseInt(prodCant[1]);
 
                 Producto producto = buscarProductoID(idProducto);
                 if (producto != null) {
-                    Items nuevo = new Items(producto, cantidad);
-                    listaItems.add(nuevo);
+                    listaItems.add(new Items(producto, cantidad));
                 }
             }
 
-            double total = Double.parseDouble(partes[3]);
-            String fecha = partes[4];
+            // el último elemento es el total
+            double total = Double.parseDouble(partes[partes.length - 1]);
 
-            Venta venta = new Venta(idVenta, cliente, listaItems, total, fecha);
+            Venta venta = new Venta(idVenta, cliente, listaItems, total);
 
             ventas.add(venta);
-            cliente.getHistorialCompras().add(venta);
         }
+        br.close();
 
         } catch (Exception e) {
             System.out.println("Error cargando ventas: " + e.getMessage());
@@ -186,7 +175,6 @@ public class App {
             }
 
             pw.close();
-            bw.close();
         } catch (IOException e) {
             e.fillInStackTrace();
         }
@@ -309,6 +297,7 @@ public class App {
     public void mostrarProductos() {
         // Se cargan los productos al array global de productos
         // y se muestra la informacion correspondiente a cada producto
+        producto.clear();
         cargarProductos();
 
         for(Producto P: producto){
@@ -319,9 +308,6 @@ public class App {
 
     //Buscar producto por su ID
     public void buscarProducto() {
-        // Se cargan los productos al array global de productos  
-        // si es encontrado se muestra su informacion
-        cargarProductos();
 
         System.out.println("Ingresa el id del producto");
         int id = sc.nextInt();
@@ -355,17 +341,16 @@ public class App {
 
             System.out.println("Ingresa el id del cliente");
             int id = sc.nextInt();
+            sc.nextLine();
 
             System.out.println("Ingresa el nombre completo del cliente");
             String nombre = sc.nextLine();
-            sc.nextLine();
 
             System.out.println("Ingresa el email del cliente");
             String email = sc.nextLine();
 
-            ArrayList<Venta> historial = new ArrayList<>();
 
-            Cliente cliente = new Cliente(id, nombre, email, historial);
+            Cliente cliente = new Cliente(id, nombre, email);
             pw.println(cliente.toString());
             pw.close();
         } catch (IOException e) {
@@ -378,6 +363,7 @@ public class App {
     public void mostrarClientes() {
         // Se cargan los clientes al array Global de clientes
         // y se muestran  con su informacion correspondiente
+        clientes.clear();
         cargarClientes();
 
         for(Cliente C: clientes){
@@ -401,7 +387,7 @@ public class App {
         Cliente cliente = buscarClienteID(idCliente);
 
         if (cliente == null) {
-            System.out.println("Cliente no encontrado ❌");
+            System.out.println("Cliente no encontrado ");
             return;
         }
 
@@ -422,7 +408,7 @@ public class App {
             Producto producto = buscarProductoID(idProducto);
 
             if (producto == null) {
-                System.out.println("Producto no encontrado ❌");
+                System.out.println("Producto no encontrado ");
                 return;
             }
 
@@ -430,12 +416,12 @@ public class App {
             int cantidad = sc.nextInt();
 
             if (cantidad <= 0) {
-                System.out.println("Cantidad inválida ❌");
+                System.out.println("Cantidad inválida ");
                 return;
             }
 
             if (cantidad > producto.getStock()) {
-                System.out.println("Stock insuficiente ❌");
+                System.out.println("Stock insuficiente ");
                 return;
             }
 
@@ -451,24 +437,22 @@ public class App {
             opcion = sc.next();  // (si / no)
         }
 
+        ventas.clear();
+        cargarVentas();
         // Creamos realmente la venta
         int idVenta = ventas.size() + 1;
-        String fecha = java.time.LocalDate.now().toString();
 
         double total = 0.0;
         for (Items items : listaItems) {
             total += items.getSubTotal();
         }
 
-        Venta nuevaVenta = new Venta(idVenta, cliente, listaItems, total, fecha);
+        Venta nuevaVenta = new Venta(idVenta, cliente, listaItems, total);
 
         System.out.println("Total a pagar: $" + total);
 
         // Guardar temporalmente en el arrayList ventas global
         ventas.add(nuevaVenta);
-
-        // Se agrega la venta al historial de compras al cliente correspondiente
-        cliente.getHistorialCompras().add(nuevaVenta);
 
         // Guarda la venta en el archivo Ventas.txt
         // Guarda nuevamente los productos depues de cada Venta con la nueva cantidad
@@ -492,7 +476,6 @@ public class App {
 
     //Muestra las ventas 
     public void mostrarVentas() {
-
         // Verificamos qu el array no este vacio
         if (ventas.isEmpty()) {
         System.out.println("No hay ventas registradas.");
@@ -504,7 +487,6 @@ public class App {
             System.out.println("=====================================");
             System.out.println("ID Venta: " + V.getIdVenta());
             System.out.println("Cliente: " + V.getCliente().getNombre() + " (ID: " + V.getCliente().getId() + ")");
-            System.out.println("Fecha: " + V.getFecha());
             System.out.println("Productos comprados:");
 
             // Recorremos el array de los items y toda la informacion del producto
@@ -527,4 +509,61 @@ public class App {
         }
     }
 
+    public static void main(String[] args) {
+
+
+    App app = new App();
+    Scanner sc = new Scanner(System.in);
+    app.cargarClientes();
+    app.cargarProductos();
+    app.cargarVentas();
+
+    int opcion = 0;
+
+    do {
+        System.out.println("\n========= MENU PRINCIPAL =========");
+        System.out.println("1. Agregar Producto");
+        System.out.println("2. Mostrar Productos");
+        System.out.println("3. Buscar Producto por ID");
+        System.out.println("4. Agregar Cliente");
+        System.out.println("5. Mostrar Clientes");
+        System.out.println("6. Realizar Venta");
+        System.out.println("7. Mostrar Ventas");
+        System.out.println("8. Salir");
+        System.out.print("Seleccione una opción: ");
+        opcion = sc.nextInt();
+        sc.nextLine(); // limpiar buffer
+
+        switch(opcion) {
+            case 1:
+                app.agregarProducto();
+                break;
+            case 2:
+                app.mostrarProductos();
+                break;
+            case 3:
+                app.buscarProducto();
+                break;
+            case 4:
+                app.agregarCliente();
+                break;
+            case 5:
+                app.mostrarClientes();
+                break;
+            case 6:
+                app.realizarVenta();
+                break;
+            case 7:
+                app.mostrarVentas();
+                break;
+            case 8:
+                System.out.println("¡Saliendo del programa!");
+                break;
+            default:
+                System.out.println("Opción inválida, intente nuevamente.");
+        }
+    } while(opcion != 8);
+
+    sc.close();
+    }
 }

@@ -25,5 +25,6 @@ public class ProductoElectrico extends Producto {
     public void mostrarInfo(){
         super.mostrarInfo();
         System.out.println("Garantia en mese: " +  getGarantiaMeses());
+        System.out.println("--------------------------------------\n");
     }
 }

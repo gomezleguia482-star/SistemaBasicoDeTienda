@@ -40,8 +40,8 @@ public class Producto {
 
     //Metodos de disminuir y aumentar el stock
     public int vender(int cantidad){
-        this.stock = stock - cantidad;
-        return stock;
+        
+        return this.stock = stock - cantidad;
     }
 
     public int reponer(int cantidad){
@@ -57,10 +57,8 @@ public class Producto {
     //Metodo de mostrar la informacion del producto
     //Que sera sobrescrito en las clases hijas
     public void mostrarInfo(){
-        System.out.println("Id: " + getId());
-        System.out.println("Nombre: " + getNombre());
-        System.out.println("Precio: " + getPrecio());
-        System.out.println("Stock: " + getStock());
+        System.out.println();
+        System.out.println("Id: " + getId() + " | Nombre: " + getNombre() + " | Precio: " + getPrecio() + " | Stock: " + getStock());
         System.out.println("Disponible: " + getDisponible());
     }
 

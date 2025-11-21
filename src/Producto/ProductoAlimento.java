@@ -26,6 +26,7 @@ public class ProductoAlimento extends Producto {
     public void mostrarInfo(){
         super.mostrarInfo();
         System.out.println("Fecha Vencimiento: " + getFechaVencimiento());
+        System.out.println("--------------------------------------\n");
     }
 
 }

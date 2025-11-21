@@ -1,0 +1,4 @@
+PA,321,cebolla,1000.0,178,true,12/11/2026
+PA,4323,jamon,3400.0,4,true,10/08/2026
+PE,6574,abanico,350000.0,0,false,12
+PR,7984,camisa,75000.0,32,true,32,negro

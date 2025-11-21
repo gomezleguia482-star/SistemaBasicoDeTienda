@@ -12,15 +12,13 @@ public class Venta {
     private Cliente cliente;
     private ArrayList<Items> itemsVenta = new ArrayList<>();
     private double totalCompra;
-    private String fecha;
 
     //Contructor
-    public Venta(int idVenta, Cliente cliente, ArrayList<Items> itemsVenta,double totalCompra, String fecha){
+    public Venta(int idVenta, Cliente cliente, ArrayList<Items> itemsVenta,double totalCompra){
         this.idVenta = idVenta;
         this.cliente = cliente;
         this.itemsVenta = itemsVenta;
         this.totalCompra = totalCompra;
-        this.fecha = fecha;
     }
 
     /*Metodos getter y setter*/
@@ -40,9 +38,6 @@ public class Venta {
         return totalCompra;
     }
 
-    public String getFecha() {
-        return fecha;
-    }
 
 
     //Agregar Productos comprados a la venta
@@ -69,8 +64,7 @@ public class Venta {
         }
     }
 
-    sb.append(",").append(totalCompra).append(",");
-    sb.append(fecha);
+    sb.append(",").append(totalCompra);
 
     return sb.toString();
     }

@@ -32,6 +32,7 @@ public class ProductoRopa extends Producto {
         super.mostrarInfo();
         System.out.println("Talla: " + getTalla());
         System.out.println("Color: " + getColor());
+        System.out.println("--------------------------------------\n");
     }
 
 }
