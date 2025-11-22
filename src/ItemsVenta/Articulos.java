@@ -1,15 +1,15 @@
-package itemsVenta;
+package ItemsVenta;
 
 
 import Producto.Producto;
 
-public class Items {
+public class Articulos {
     //Atributos
     private Producto producto;
     private int cantidad;
 
     //Constructor
-    public Items(Producto producto, int cantidad){
+    public Articulos(Producto producto, int cantidad){
         this.producto = producto;
         this.cantidad = cantidad;
     }

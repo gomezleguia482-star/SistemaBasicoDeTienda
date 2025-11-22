@@ -4,21 +4,23 @@ package Venta;
 import java.util.ArrayList;
 
 import Cliente.Cliente;
-import itemsVenta.Items;
+import ItemsVenta.Articulos;
 
 public class Venta {
     //Atributos
     private int idVenta;
     private Cliente cliente;
-    private ArrayList<Items> itemsVenta = new ArrayList<>();
+    private ArrayList<Articulos> itemsVenta = new ArrayList<>();
     private double totalCompra;
+    private String fechaVenta;
 
     //Contructor
-    public Venta(int idVenta, Cliente cliente, ArrayList<Items> itemsVenta,double totalCompra){
+    public Venta(int idVenta, Cliente cliente, ArrayList<Articulos> itemsVenta, double totalCompra, String fechaVenta){
         this.idVenta = idVenta;
         this.cliente = cliente;
         this.itemsVenta = itemsVenta;
         this.totalCompra = totalCompra;
+        this.fechaVenta = fechaVenta;
     }
 
     /*Metodos getter y setter*/
@@ -30,7 +32,7 @@ public class Venta {
         return cliente;
     }
 
-    public ArrayList<Items> getItemsVenta() {
+    public ArrayList<Articulos> getItemsVenta() {
         return itemsVenta;
     }
 
@@ -41,7 +43,7 @@ public class Venta {
 
 
     //Agregar Productos comprados a la venta
-    public void agregarItems(Items itm){
+    public void agregarItems(Articulos itm){
         itemsVenta.add(itm);
     }
 
@@ -53,7 +55,7 @@ public class Venta {
     sb.append(cliente.getId()).append(",");
 
     for (int i = 0; i < itemsVenta.size(); i++) {
-        Items it = itemsVenta.get(i);
+        Articulos it = itemsVenta.get(i);
 
         sb.append(it.getProducto().getId())
         .append("-")
