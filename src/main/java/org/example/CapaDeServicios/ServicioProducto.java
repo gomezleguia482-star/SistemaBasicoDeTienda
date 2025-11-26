@@ -48,18 +48,19 @@ public class ServicioProducto {
 
             System.out.println("Ingresa el precio del producto");
             double precioProducto = sc.nextDouble();
+            sc.nextLine();
 
             boolean disponible = Producto.validarDisponibilidad(stockProducto);
             Producto producto = null;
             switch(option){
                 case 1:
-                    System.out.println("Ingresa la fecha de vencimiento (Ej: 20-10-2030)");
+                    System.out.println("Ingresa la fecha de vencimiento (Ej: yyyy-MM-dd)");
                     String fecha = sc.nextLine();
 
                     if(fecha.matches("^-?\\\\d+$")){
                         throw new IllegalArgumentException("Ingresa una fecha adecuada");
                     }
-                    DateTimeFormatter formatoEsperado = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    DateTimeFormatter formatoEsperado = DateTimeFormatter.ofPattern("yyyyMMdd");
                     LocalDate fechaVencimiento = LocalDate.parse(fecha, formatoEsperado);
 
                     producto = new ProductoAlimento(idProducto, nombreProducto, stockProducto,precioProducto,disponible, fechaVencimiento);
@@ -78,6 +79,7 @@ public class ServicioProducto {
                 case 3:
                     System.out.println("Ingresa la talla de la prenda");
                     int tallaRopa = sc.nextInt();
+                    sc.nextLine();
 
                     System.out.println("Ingresa el color de la prenda");
                     String colorRopa = sc.nextLine();
@@ -104,5 +106,12 @@ public class ServicioProducto {
             System.out.println("ERROR. " + e.getMessage());
         }
 
+    }
+
+    public static void mostrarProductos(){
+        ArrayList<Producto> listaProductos = ProductoDAO.cargarProducto();
+        for(Producto P: listaProductos){
+            P.mostrarInfoProducto();
+        }
     }
 }

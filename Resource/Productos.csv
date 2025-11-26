@@ -1,4 +1,10 @@
-PA,49,borojo,566,3000.0,false,2026-12-10
+PA,49,borojo,500,3000.0,false,2026-12-10
 PA,38923,crispeta,32,3943.0,true,2026-02-12
-PE,2843,abanico,3,84734.0,true,23
+PE,2843,abanico,1,84734.0,true,23
 PE,85394,nevera,0,949394.0,false,3
+PR,65743,sueter,50,50400.0,true,30,negro
+PE,64738,portatil,3,5990000.0,true,23
+PA,83922,jamon,32,3900.0,true,2026-08-12
+PE,483902,plancha,5,140000.0,true,45
+PR,300,boxer,98,12000.0,true,24,rojo
+PA,30232,cebolla,123,600.0,true,2025-12-31
