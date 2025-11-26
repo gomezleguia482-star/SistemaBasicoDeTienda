@@ -3,6 +3,7 @@ package org.example.CapaDePersistencia;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class ManejadorCSV {
 
     public static void guardarCsv(String nombreArchivo, List<String> datos){
         try{
-            Files.write(Paths.get(nombreArchivo),datos);
+            Files.write(Paths.get(nombreArchivo),datos, StandardOpenOption.APPEND);
         }catch(IOException e){
-            System.out.println("ERROR. Guardar los datos");
+            System.out.println("ERROR. Guardar los datos " + e.getMessage());
         }
     }
 }

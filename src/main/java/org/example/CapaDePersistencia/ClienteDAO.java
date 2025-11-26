@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-    private static final String NOMBRE_CSV = "org.example/Resource/Clientes.csv";
+    private static final String NOMBRE_CSV = "Resource/Clientes.csv";
 
     public static ArrayList<Cliente> cargarClientes(){
         List<String> lineasCliente = ManejadorCSV.leerCsv(NOMBRE_CSV);
