@@ -47,16 +47,6 @@ public class ServicioCliente {
         }
     }
 
-    public static Cliente buscarCliente(int idCliente){
-        ArrayList<Cliente> listaCliente = ClienteDAO.cargarClientes();
-        for (Cliente C: listaCliente){
-            if(C.getId() == idCliente){
-                return C;
-            }
-        }
-        return null;
-    }
-
     public static void mostrarClientes(){
         ArrayList<Cliente> listaCliente = ClienteDAO.cargarClientes();
         for (Cliente C: listaCliente){
@@ -64,4 +54,5 @@ public class ServicioCliente {
                     " | Email: " + C.getEmailCliente());
         }
     }
+
 }

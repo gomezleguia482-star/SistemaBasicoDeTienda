@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class VentaDAO {
-    private static final String NOMBRE_CSV = "org.example/Resource/Ventas.csv";
+    private static final String NOMBRE_CSV = "Resource/Ventas.csv";
 
     public static ArrayList<Venta> CargarVentas(){
         List<String> lineas = ManejadorCSV.leerCsv(NOMBRE_CSV);
@@ -33,8 +33,9 @@ public class VentaDAO {
             }
 
             double totalCompra = Double.parseDouble(partes[partes.length - 2]);
+            LocalDate fechaVenta = LocalDate.parse(partes[partes.length - 1]);
 
-            Venta venta = new Venta(idVenta,idCliente,listaArticulos, totalCompra);
+            Venta venta = new Venta(idVenta,idCliente,listaArticulos, totalCompra,fechaVenta);
             listaVentas.add(venta);
         }
         return listaVentas;

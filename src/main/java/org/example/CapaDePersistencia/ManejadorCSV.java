@@ -14,11 +14,6 @@ public class ManejadorCSV {
 
         try{
             lineas = Files.readAllLines(Paths.get(nombreArchivo));
-
-            if(lineas == null){
-                System.out.println("ERROR. Archivo no encontrado");
-                return lineas;
-            }
         }catch(IOException e){
             System.out.println("ERROR. Lectura del archivo con nombre:  " + nombreArchivo + e.getLocalizedMessage());
         }
@@ -30,6 +25,19 @@ public class ManejadorCSV {
             Files.write(Paths.get(nombreArchivo),datos, StandardOpenOption.APPEND);
         }catch(IOException e){
             System.out.println("ERROR. Guardar los datos " + e.getMessage());
+        }
+    }
+
+    public static void sobreescribirCsv(String nombreArchivo, List<String> datos){
+        try{
+            //Sin StandardOpenOption.APPEND, el archivo se SOBRESCRIBE.
+            Files.write(Paths.get(nombreArchivo), datos);
+
+            // También es buena práctica incluir StandardOpenOption.CREATE
+            // Files.write(Paths.get(nombreArchivo), datos, StandardOpenOption.CREATE);
+
+        }catch(IOException e){
+            System.out.println("ERROR. Al sobreescribir los datos: " + e.getMessage());
         }
     }
 }

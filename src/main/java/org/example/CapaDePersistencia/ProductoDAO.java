@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ProductoDAO {
-    private static final String NOMBRE_CSV = "org.example/Resource/Productos.csv";
+    private static final String NOMBRE_CSV = "Resource/Productos.csv";
 
     public static ArrayList<Producto> cargarProducto(){
         List<String> lineasProducto = ManejadorCSV.leerCsv(NOMBRE_CSV);
@@ -25,21 +25,23 @@ public class ProductoDAO {
             int idProducto = Integer.parseInt(partes[1]);
             String nombreProducto = partes[2];
             int stockProducto = Integer.parseInt(partes[3]);
+            double precioProducto = Double.parseDouble(partes[4]);
+            boolean disponible = Boolean.parseBoolean(partes[5]);
 
             Producto producto = null;
             switch(tipo){
                 case "PA":
-                    LocalDate fechaVencimiento = LocalDate.parse(partes[4]);
-                    producto = new ProductoAlimento(idProducto, nombreProducto, stockProducto, fechaVencimiento);
+                    LocalDate fechaVencimiento = LocalDate.parse(partes[6]);
+                    producto = new ProductoAlimento(idProducto, nombreProducto, stockProducto,precioProducto,disponible, fechaVencimiento);
                     break;
                 case "PE":
-                    int garantiaProducto = Integer.parseInt(partes[4]);
-                    producto = new ProductoElectronico(idProducto, nombreProducto, stockProducto, garantiaProducto);
+                    int garantiaProducto = Integer.parseInt(partes[6]);
+                    producto = new ProductoElectronico(idProducto, nombreProducto, stockProducto,precioProducto,disponible, garantiaProducto);
                     break;
                 case "PR":
-                    int tallaProducto = Integer.parseInt(partes[4]);
-                    String colorProducto = partes[5];
-                    producto = new ProductoRopa(idProducto, nombreProducto, stockProducto, tallaProducto, colorProducto);
+                    int tallaProducto = Integer.parseInt(partes[6]);
+                    String colorProducto = partes[7];
+                    producto = new ProductoRopa(idProducto, nombreProducto, stockProducto,precioProducto,disponible, tallaProducto, colorProducto);
                     break;
                 default:
                     System.out.println("Tipo de producto Invalido");
@@ -50,7 +52,8 @@ public class ProductoDAO {
         return listaProductos;
     }
 
-    public Producto buscarProducto(int idProducto, ArrayList<Producto> listaProductos){
+    public static Producto buscarProductoID(int idProducto){
+        ArrayList<Producto> listaProductos = cargarProducto();
         for(Producto P: listaProductos){
             if(P.getIdProducto() == idProducto){
                 return P;

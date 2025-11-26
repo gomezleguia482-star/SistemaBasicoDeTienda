@@ -22,7 +22,6 @@ public class Cliente {
     }
 
 
-
     public int getId() {return idCliente;}
     public String getNombreCliente() {return nombreCliente;}
     public String getEmailCliente() {return emailCliente;}

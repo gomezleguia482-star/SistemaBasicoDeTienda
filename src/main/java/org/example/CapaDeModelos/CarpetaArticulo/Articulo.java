@@ -2,7 +2,10 @@ package org.example.CapaDeModelos.CarpetaArticulo;
 
 import org.example.CapaDeModelos.CarpetaProducto.Producto;
 
+import java.security.PrivateKey;
+
 public class Articulo {
+    private  Producto producto;
     private int idProducto;
     private int cantidadSell;
 
@@ -22,4 +25,6 @@ public class Articulo {
     public String toString() {
         return getIdProducto() + "-" + getCantidadSell();
     }
+
+
 }

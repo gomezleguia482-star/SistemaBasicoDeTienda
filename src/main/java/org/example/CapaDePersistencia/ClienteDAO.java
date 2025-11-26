@@ -26,7 +26,8 @@ public class ClienteDAO {
     }
 
 
-    public Cliente buscarCliente(int idCliente, ArrayList<Cliente> listaClientes){
+    public static Cliente buscarClienteID(int idCliente){
+        ArrayList<Cliente> listaClientes = cargarClientes();
         for(Cliente C: listaClientes){
             if(C.getId() == idCliente){
                 return C;

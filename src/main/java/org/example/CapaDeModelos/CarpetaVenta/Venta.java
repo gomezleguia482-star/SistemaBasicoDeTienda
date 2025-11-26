@@ -14,12 +14,12 @@ public class Venta {
     private double totalVenta;
     private LocalDate fechaVenta;
 
-    public Venta(int idVenta, int idCliente, ArrayList<Articulo> listaArticulos, double totalVenta){
+    public Venta(int idVenta, int idCliente, ArrayList<Articulo> listaArticulos, double totalVenta, LocalDate fechaVenta){
         this.idVenta = idVenta;
         this.idCliente = idCliente;
         this.listaArticulos = listaArticulos;
         this.totalVenta = totalVenta;
-        this.fechaVenta = LocalDate.now();
+        this.fechaVenta = fechaVenta;
     }
 
     public int getIdVenta() {return idVenta;}
@@ -45,4 +45,6 @@ public class Venta {
 
         return sb.toString();
     }
+
+
 }
