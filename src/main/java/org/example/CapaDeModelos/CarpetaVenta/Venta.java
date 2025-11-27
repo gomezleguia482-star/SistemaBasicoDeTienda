@@ -46,5 +46,15 @@ public class Venta {
         return sb.toString();
     }
 
+    public void mostrarInformacionVenta(){
+        System.out.println("Id venta: " + getIdVenta());
+        System.out.println("Id cliente: " + getIdCliente());
+        for(Articulo A: getListaArticulos()){
+            A.moatrarInfomacionItems();
+        }
+        System.out.println("Total venta: " + getTotalVenta());
+        System.out.println("Fecha Venta: " + getFechaVenta());
+        System.out.println("------------------------------------------------");
+    }
 
 }

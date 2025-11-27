@@ -21,10 +21,11 @@ public class Articulo {
         return cantidadSell > 0;
     }
 
-    @Override
     public String toString() {
         return getIdProducto() + "-" + getCantidadSell();
     }
 
-
+    public void moatrarInfomacionItems(){
+        System.out.println("Id Producto: " + getIdProducto() + " | Unidades compradas: " + getCantidadSell());
+    }
 }

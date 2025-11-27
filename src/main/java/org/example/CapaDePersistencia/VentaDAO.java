@@ -40,6 +40,4 @@ public class VentaDAO {
         }
         return listaVentas;
     }
-
-
 }

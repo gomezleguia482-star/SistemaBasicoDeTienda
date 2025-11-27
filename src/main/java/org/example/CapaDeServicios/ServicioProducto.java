@@ -54,14 +54,27 @@ public class ServicioProducto {
             Producto producto = null;
             switch(option){
                 case 1:
-                    System.out.println("Ingresa la fecha de vencimiento (Ej: yyyy-MM-dd)");
-                    String fecha = sc.nextLine();
+                    String fecha;
+                    LocalDate fechaVencimiento = null;
+                    DateTimeFormatter formatoEsperado = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-                    if(fecha.matches("^-?\\\\d+$")){
-                        throw new IllegalArgumentException("Ingresa una fecha adecuada");
-                    }
-                    DateTimeFormatter formatoEsperado = DateTimeFormatter.ofPattern("yyyyMMdd");
-                    LocalDate fechaVencimiento = LocalDate.parse(fecha, formatoEsperado);
+                    do {
+                        System.out.println("Ingresa la fecha de vencimiento (Ej: yyyy-MM-dd)");
+                        fecha = sc.nextLine();
+
+                        try {
+                            // 1. Intenta convertir la cadena a LocalDate
+                            fechaVencimiento = LocalDate.parse(fecha, formatoEsperado);
+
+                            // Si la conversión es exitosa, el bucle terminará
+
+                        } catch (java.time.format.DateTimeParseException e) {
+                            // 2. Si falla (formato incorrecto), atrapa la excepción
+                            System.out.println("ERROR. El formato de fecha ingresado es incorrecto.");
+                            System.out.println("Por favor, usa el formato yyyy-MM-dd (Ej: 2025-12-31).");
+                            fechaVencimiento = null; // Mantiene la variable null para repetir el bucle
+                        }
+                    } while (fechaVencimiento == null); // Repite mientras la fecha no haya sido parseada con éxito
 
                     producto = new ProductoAlimento(idProducto, nombreProducto, stockProducto,precioProducto,disponible, fechaVencimiento);
                     break;
@@ -102,6 +115,8 @@ public class ServicioProducto {
 
         }catch(java.util.InputMismatchException e){
             System.out.println("ERROR. Ingresa un dato numerico");
+            sc.nextLine();
+            agregarProducto(sc);
         }catch(IllegalArgumentException e){
             System.out.println("ERROR. " + e.getMessage());
         }
@@ -114,4 +129,6 @@ public class ServicioProducto {
             P.mostrarInfoProducto();
         }
     }
+
+    //Agregar la funcionde buscar productos
 }
