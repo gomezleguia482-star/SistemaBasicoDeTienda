@@ -105,6 +105,7 @@ public class ServicioVenta {
 
                 if (producto.getStockProducto() < cantidadSell){
                     System.out.println("Cantida no disponible");
+                    producto.mostrarInfoProducto();
                     return;
                 }
 
@@ -114,7 +115,7 @@ public class ServicioVenta {
 
                 for (Producto P: lineasProductos){
                     if(P.getIdProducto() == producto.getIdProducto()){
-                        P.setStockProducto(cantidadSell);
+                        P.vender(cantidadSell);
                         if(!P.validarDisponibilidad(P.getStockProducto())){
                             P.setDisponible(false);
                         }

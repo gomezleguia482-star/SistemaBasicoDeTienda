@@ -35,8 +35,12 @@ public class Producto {
     public boolean getDisponible() {return disponible;}
 
 
-    public void setStockProducto(int cantidad) {
+    public void vender(int cantidad) {
         this.stockProducto -= cantidad;
+    }
+
+    public void reponer(int cantidad){
+        stockProducto += cantidad;
     }
 
     public void setDisponible(boolean disponible) {

@@ -123,6 +123,44 @@ public class ServicioProducto {
 
     }
 
+    public static void reponerStock(Scanner sc){
+        ArrayList<Producto> listaProductos = ProductoDAO.cargarProducto();
+        try{
+            System.out.println("Ingresa el id del producto");
+            int idProducto = sc.nextInt();
+
+            for(Producto P: listaProductos){
+                if(P.getIdProducto() == idProducto){
+                    System.out.println("Ingresa la cantidad que desea reponer del proucto " + P.getNombreProducto());
+                    int aumentoStock = sc.nextInt();
+
+                    if(aumentoStock < 1){
+                        System.out.println("Cantidad invalida");
+                        return;
+                    }
+
+                    P.reponer(aumentoStock);
+
+                    if(P.getStockProducto() > 0){
+                        P.setDisponible(true);
+                    }
+                }
+            }
+
+            ArrayList<String> productosString = new ArrayList<>();
+
+            for (Producto P: listaProductos){
+                productosString.add(P.toString());
+            }
+
+            ManejadorCSV.sobreescribirCsv("Resource/Productos.csv", productosString);
+            System.out.println("Stock agregado correctamente");
+
+        }catch(java.util.InputMismatchException e){
+            System.out.println("ERROR. Ingresa numeros " + e.getLocalizedMessage());
+        }
+    }
+
     public static void mostrarProductos(){
         ArrayList<Producto> listaProductos = ProductoDAO.cargarProducto();
         for(Producto P: listaProductos){

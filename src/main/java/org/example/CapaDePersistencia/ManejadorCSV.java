@@ -22,7 +22,7 @@ public class ManejadorCSV {
 
     public static void guardarCsv(String nombreArchivo, List<String> datos){
         try{
-            Files.write(Paths.get(nombreArchivo),datos, StandardOpenOption.APPEND);
+            Files.write(Paths.get(nombreArchivo),datos, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
         }catch(IOException e){
             System.out.println("ERROR. Guardar los datos " + e.getMessage());
         }
