@@ -36,11 +36,10 @@ public class Main {
                     case 8 -> System.out.println("Saliendo del sistema...");
                     default -> System.out.println("Option Invalid");
                 }
-            }while(option != 7);
+            }while(option != 8);
         }catch(java.util.InputMismatchException e){
             System.out.println("Ingresa solo numeros validos " + e.getCause());
         }
         sc.close();
     }
-    //Mostrar en un opcion solo los del producto y las unidades vendidas
 }

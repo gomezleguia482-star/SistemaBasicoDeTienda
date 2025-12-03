@@ -4,18 +4,18 @@ import java.util.Scanner;
 
 public class Producto {
     Scanner sc = new Scanner(System.in);
+    private String tipo;
     private int idProducto;
     private String nombreProducto;
     private int stockProducto;
     private double precio;
-    private boolean disponible;
 
-    public Producto(int idProducto, String nombreProducto, int stockProducto,double precio, boolean disponible){
+    public Producto(String tipo, int idProducto, String nombreProducto, int stockProducto,double precio){
+        this.tipo = tipo;
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.stockProducto = stockProducto;
         this.precio = precio;
-        this.disponible = disponible;
     }
 
     public static boolean validarDisponibilidad(int stockProducto){
@@ -32,7 +32,6 @@ public class Producto {
     public String getNombreProducto() {return nombreProducto;}
     public int getStockProducto() {return stockProducto;}
     public double getPrecio() {return precio;}
-    public boolean getDisponible() {return disponible;}
 
 
     public void vender(int cantidad) {
@@ -43,19 +42,12 @@ public class Producto {
         stockProducto += cantidad;
     }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
-
     public String toString() {
-        return getIdProducto() + "," + getNombreProducto() + "," + getStockProducto() +  "," + getPrecio() +"," + getDisponible();
+        return getIdProducto() + "," + getNombreProducto() + "," + getStockProducto() +  "," + getPrecio();
     }
 
     public void mostrarInfoProducto(){
-        System.out.println("Id: " + getIdProducto());
-        System.out.println("Nombre: " + getNombreProducto());
-        System.out.println("Stock: " + getStockProducto());
-        System.out.println("Precio: " + getPrecio());
-        System.out.println("Disponibilidad: " + getDisponible());
+        System.out.println("Id: " + getIdProducto() + " | Nombre: " + getNombreProducto() +
+                " | Stock: " + getStockProducto() + " | Precio: " + getPrecio());
     }
 }

@@ -1,16 +1,16 @@
 package org.example.CapaDeModelos.CarpetaProducto;
 
 public class ProductoRopa extends Producto {
-    private int talla;
+    private String talla;
     private String color;
 
-    public ProductoRopa(int idProducto, String nombreProducto, int stockProducto,double precio, boolean diponible, int talla, String color) {
-        super(idProducto, nombreProducto, stockProducto,precio, diponible);
+    public ProductoRopa(String tipo, int idProducto, String nombreProducto, int stockProducto,double precio, String talla, String color) {
+        super(tipo, idProducto, nombreProducto, stockProducto,precio);
         this.talla = talla;
         this.color = color;
     }
 
-    public int getTalla() {
+    public String getTalla() {
         return talla;
     }
 
@@ -27,8 +27,7 @@ public class ProductoRopa extends Producto {
     @Override
     public void mostrarInfoProducto() {
         super.mostrarInfoProducto();
-        System.out.println("Talla: " + getTalla());
-        System.out.println("Color de la prenda: " + getColor());
+        System.out.println("Talla: " + getTalla() + " | Color de la prenda: " + getColor());
         System.out.println("---------------------------------------");
     }
 }

@@ -5,7 +5,7 @@ import org.example.CapaDeModelos.CarpetaCliente.Cliente;
 import org.example.CapaDeModelos.CarpetaProducto.Producto;
 import org.example.CapaDeModelos.CarpetaVenta.Venta;
 import org.example.CapaDePersistencia.ClienteDAO;
-import org.example.CapaDePersistencia.ManejadorCSV;
+import org.example.CapaDePersistencia.ManejadorDB;
 import org.example.CapaDePersistencia.ProductoDAO;
 import org.example.CapaDePersistencia.VentaDAO;
 
@@ -16,21 +16,19 @@ import java.util.Scanner;
 public class ServicioVenta {
 
     public static void realizarVenta(Scanner sc){
-        ArrayList<String> listaVentas = new ArrayList<>();
-        ArrayList<Venta> numeroVentas = VentaDAO.CargarVentas();
-        ArrayList<Producto> lineasProductos = ProductoDAO.cargarProducto();
+        ArrayList<Venta> numeroVentas = VentaDAO.leerVentasConDetalles();
+        ArrayList<Producto> lineasProductos = ProductoDAO.leerDBProductos();
 
         try{
             int idCliente;
             Cliente cliente;
 
-            // Hacer esta validadcion en el punto de producto tambien
             do {
                 System.out.println("Ingresa el id del cliente");
                 idCliente = sc.nextInt();
                 sc.nextLine();
 
-                cliente = ClienteDAO.buscarClienteID(idCliente);
+                cliente = ClienteDAO.buscarClienteId(idCliente);
 
                 if(cliente == null){
                     System.out.println("Cliente no encontrado verifica nuevamente su id");
@@ -71,10 +69,10 @@ public class ServicioVenta {
                     int idProducto = sc.nextInt();
                     sc.nextLine();
 
-                    producto = ProductoDAO.buscarProductoID(idProducto);
+                    producto = ProductoDAO.buscarProductoId(idProducto);
 
                     if(producto == null){
-                        System.out.println("Cliente no encontrado verifica nuevamente su id");
+                        System.out.println("Producto no encontrado verifica nuevamente su id");
                         System.out.println("¿ Desea cancelar su venta ?");
                         String cancelarVenta = sc.nextLine();
 
@@ -112,16 +110,6 @@ public class ServicioVenta {
                 Articulo articulo = new Articulo(producto.getIdProducto(), cantidadSell);
                 listaArticulos.add(articulo);
 
-
-                for (Producto P: lineasProductos){
-                    if(P.getIdProducto() == producto.getIdProducto()){
-                        P.vender(cantidadSell);
-                        if(!P.validarDisponibilidad(P.getStockProducto())){
-                            P.setDisponible(false);
-                        }
-                    }
-                }
-
                 totalCompra += producto.getPrecio() * cantidadSell;
 
                 sc.nextLine();
@@ -140,31 +128,26 @@ public class ServicioVenta {
             LocalDate fechaVenta = LocalDate.now();
 
             Venta nuevaVenta = new Venta(idVenta, cliente.getId(), listaArticulos, totalCompra,fechaVenta);
-            listaVentas.add(nuevaVenta.toString());
+            VentaDAO.guardarVenta(nuevaVenta);
 
-            ManejadorCSV.guardarCsv("Resource/Ventas.csv", listaVentas);
+            System.out.println("Venta realizada con exito!");
 
-            ArrayList<String> lineasEscribir = new ArrayList<>();
-            for (Producto P : lineasProductos) {
-                lineasEscribir.add(P.toString());
-            }
-
-            ManejadorCSV.sobreescribirCsv("Resource/Productos.csv",lineasEscribir);
         }catch(java.util.InputMismatchException e){
             System.out.println("ERROR. Debe ingresar datos numericos");
             System.out.println("Reintente nuevamante");
-            // **LA LÍNEA CRUCIAL: Limpia el buffer después de la excepción**
             sc.nextLine();
-            // Vuelve a llamar a realizarVenta o informa que la operación falló.
-            // Si la llamas recursivamente, es para que el usuario pueda reintentar.
             realizarVenta(sc);
         }
     }
 
     public static void mostrarVentas(){
-        ArrayList<Venta> ventas = VentaDAO.CargarVentas();
+        ArrayList<Venta> ventas = VentaDAO.leerVentasConDetalles();
         for (Venta V: ventas){
             V.mostrarInformacionVenta();
         }
+    }
+
+    public static void main(String[] args) {
+        mostrarVentas();
     }
 }

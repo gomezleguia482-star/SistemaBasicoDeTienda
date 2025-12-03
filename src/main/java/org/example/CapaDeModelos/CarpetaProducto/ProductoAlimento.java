@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public class ProductoAlimento extends  Producto {
     private LocalDate fechaVencimiento;
 
-    public ProductoAlimento(int idProducto, String nombreProducto, int stockProducto,double precio, boolean disponible, LocalDate fechaVencimiento){
-        super(idProducto,nombreProducto,stockProducto,precio,disponible);
+    public ProductoAlimento(String tipo, int idProducto, String nombreProducto, int stockProducto,double precio, LocalDate fechaVencimiento){
+        super(tipo,idProducto,nombreProducto,stockProducto,precio);
         this.fechaVencimiento = fechaVencimiento;
     }
 

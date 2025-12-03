@@ -3,8 +3,8 @@ package org.example.CapaDeModelos.CarpetaProducto;
 public class ProductoElectronico extends Producto{
     private int garantiaProducto;
 
-    public ProductoElectronico(int idProducto, String nombreProducto, int stockProducto,double precio, boolean disponible, int garantiaProducto){
-        super(idProducto,nombreProducto,stockProducto,precio,disponible);
+    public ProductoElectronico(String tipo, int idProducto, String nombreProducto, int stockProducto,double precio, int garantiaProducto){
+        super(tipo, idProducto,nombreProducto,stockProducto,precio);
         this.garantiaProducto = garantiaProducto;
     }
 
